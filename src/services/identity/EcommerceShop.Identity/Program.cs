@@ -26,6 +26,12 @@ app.UseAuthorization();
 
 app.MapEcommerceShopHealth();
 app.MapAuthEndpoints();
+app.MapUserEndpoints();
+
+if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
+{
+    await DbSeeder.MigrateAndSeedAsync(app.Services, app.Logger, seedDemoData: app.Environment.IsDevelopment());
+}
 
 app.Run();
 
