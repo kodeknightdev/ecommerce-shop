@@ -1,9 +1,11 @@
+using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks;
-using EcommerceShop.Orders.Domain;
+using EcommerceShop.Orders.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults("orders", typeof(Program));
+builder.Services.AddDbContext<OrdersDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("OrdersDb")));
 
 var app = builder.Build();
 
