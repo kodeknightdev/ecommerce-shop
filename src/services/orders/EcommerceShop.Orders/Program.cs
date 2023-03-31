@@ -9,6 +9,7 @@ using EcommerceShop.Orders.Application;
 using EcommerceShop.Orders.Clients;
 using EcommerceShop.Orders.Data;
 using EcommerceShop.Orders.Endpoints;
+using EcommerceShop.Orders.Messaging;
 using EcommerceShop.Protos.Catalog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,9 @@ builder.Services.AddEcommerceShopJwt(builder.Configuration);
 builder.Services.AddEcommerceShopKafka(builder.Configuration);
 
 builder.Services.AddScoped<PlaceOrderService>();
+builder.Services.AddScoped<OrderSagaHandler>();
 builder.Services.AddOutboxRelay<OrdersDbContext>(builder.Configuration);
+builder.Services.AddHostedService<OrderEventsConsumer>();
 
 // all outgoing calls go through ResiliencePolicies
 var resilience = builder.Configuration.GetSection(ResilienceOptions.SectionName).Get<ResilienceOptions>() ?? new ResilienceOptions();
