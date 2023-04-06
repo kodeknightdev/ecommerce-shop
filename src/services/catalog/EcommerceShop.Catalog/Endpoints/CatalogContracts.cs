@@ -5,11 +5,11 @@ namespace EcommerceShop.Catalog.Endpoints;
 public sealed record CategoryDto(Guid Id, string Name, string Slug, string? Description, int ProductCount);
 
 public sealed record ProductSummaryDto(Guid Id, string Sku, string Name, string Slug, decimal Price, string Currency, string ImageUrl,
-    Guid CategoryId, string CategoryName, bool IsActive);
+    Guid CategoryId, string CategoryName, bool IsActive, decimal Rating, int ReviewCount);
 
 public sealed record ProductDetailDto(Guid Id, string Sku, string Name, string Slug, string Description, decimal Price, string Currency,
     string ImageUrl, Guid CategoryId, string CategoryName, string CategorySlug, IReadOnlyDictionary<string, string> Attributes, bool IsActive,
-    DateTimeOffset CreatedAt, DateTimeOffset UpdatedAt);
+    decimal Rating, int ReviewCount, DateTimeOffset CreatedAt, DateTimeOffset UpdatedAt);
 
 public sealed record PagedResult<T>(IReadOnlyList<T> Items, int Page, int PageSize, int Total)
 {

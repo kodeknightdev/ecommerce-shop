@@ -37,6 +37,11 @@ public sealed class Product
     public string ImageUrl { get; private set; } = string.Empty;
     public Dictionary<string, string> Attributes { get; private set; } = new();
     public bool IsActive { get; private set; }
+
+    // kept in step with the visible reviews so lists can show and sort by them
+    public decimal RatingAverage { get; private set; }
+    public int ReviewCount { get; private set; }
+
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
 
@@ -66,6 +71,12 @@ public sealed class Product
     {
         IsActive = false;
         UpdatedAt = DateTimeOffset.UtcNow;
+    }
+
+    public void SetRating(int reviewCount, decimal average)
+    {
+        ReviewCount = reviewCount;
+        RatingAverage = reviewCount == 0 ? 0 : Math.Round(average, 2);
     }
 
     public long PriceCents => (long)Math.Round(Price * 100m, MidpointRounding.AwayFromZero);

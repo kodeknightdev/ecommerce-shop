@@ -1,16 +1,20 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using EcommerceShop.BuildingBlocks.Messaging;
 using EcommerceShop.Catalog.Domain;
 
 namespace EcommerceShop.Catalog.Data;
 
-public sealed class CatalogDbContext : DbContext
+public sealed class CatalogDbContext : DbContext, IInboxDbContext
 {
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options) : base(options) { }
 
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Product> Products => Set<Product>();
+    public DbSet<ProductReview> Reviews => Set<ProductReview>();
+    public DbSet<VerifiedPurchase> VerifiedPurchases => Set<VerifiedPurchase>();
+    public DbSet<ProcessedEvent> ProcessedEvents => Set<ProcessedEvent>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -48,9 +52,32 @@ public sealed class CatalogDbContext : DbContext
                     d => JsonSerializer.Serialize(d, (JsonSerializerOptions?)null),
                     s => JsonSerializer.Deserialize<Dictionary<string, string>>(s, (JsonSerializerOptions?)null) ?? new Dictionary<string, string>())
                 .Metadata.SetValueComparer(attributesComparer);
+            b.Property(p => p.RatingAverage).HasPrecision(3, 2);
             b.Ignore(p => p.PriceCents);
             b.HasIndex(p => new { p.CategoryId, p.Price });
             b.HasOne(p => p.Category).WithMany().HasForeignKey(p => p.CategoryId).OnDelete(DeleteBehavior.Restrict);
         });
+
+        modelBuilder.Entity<ProductReview>(b =>
+        {
+            b.ToTable("product_reviews");
+            b.HasKey(r => r.Id);
+            b.Property(r => r.Id).ValueGeneratedNever();
+            b.HasIndex(r => new { r.ProductId, r.UserId }).IsUnique();
+            b.HasIndex(r => new { r.ProductId, r.IsHidden, r.CreatedAt });
+            b.Property(r => r.AuthorName).HasMaxLength(100).IsRequired();
+            b.Property(r => r.Title).HasMaxLength(120);
+            b.Property(r => r.Comment).HasMaxLength(2000).IsRequired();
+            b.Property(r => r.HiddenReason).HasMaxLength(200);
+            b.HasOne<Product>().WithMany().HasForeignKey(r => r.ProductId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<VerifiedPurchase>(b =>
+        {
+            b.ToTable("verified_purchases");
+            b.HasKey(v => new { v.UserId, v.ProductId });
+        });
+
+        modelBuilder.ConfigureInbox();
     }
 }

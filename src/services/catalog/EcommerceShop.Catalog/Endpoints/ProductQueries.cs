@@ -42,6 +42,7 @@ public static class ProductQueries
         "price_asc" => query.OrderBy(p => p.Price).ThenBy(p => p.Name),
         "price_desc" => query.OrderByDescending(p => p.Price).ThenBy(p => p.Name),
         "newest" => query.OrderByDescending(p => p.CreatedAt).ThenBy(p => p.Name),
+        "rating" => query.OrderByDescending(p => p.RatingAverage).ThenByDescending(p => p.ReviewCount).ThenBy(p => p.Name),
         "name_desc" => query.OrderByDescending(p => p.Name),
         _ => query.OrderBy(p => p.Name)
     };
