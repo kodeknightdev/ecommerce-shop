@@ -3,6 +3,7 @@ using EcommerceShop.BuildingBlocks;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Health;
 using EcommerceShop.BuildingBlocks.Kafka;
+using EcommerceShop.Catalog.Caching;
 using EcommerceShop.Catalog.Data;
 using EcommerceShop.Catalog.Endpoints;
 using EcommerceShop.Catalog.Grpc;
@@ -17,6 +18,7 @@ builder.Services.AddHealthChecks().AddDbContextCheck<CatalogDbContext>("postgres
 builder.Services.AddEcommerceShopJwt(builder.Configuration);
 builder.Services.AddEcommerceShopKafka(builder.Configuration);
 builder.Services.AddHostedService<CatalogConsumer>();
+builder.Services.AddProductCache(builder.Configuration);
 builder.Services.AddGrpc(o => o.EnableDetailedErrors = builder.Environment.IsDevelopment());
 builder.Services.AddGrpcReflection();
 

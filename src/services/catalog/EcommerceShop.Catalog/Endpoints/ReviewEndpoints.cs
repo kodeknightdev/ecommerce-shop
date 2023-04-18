@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Errors;
 using EcommerceShop.BuildingBlocks.Validation;
+using EcommerceShop.Catalog.Caching;
 using EcommerceShop.Catalog.Data;
 using EcommerceShop.Catalog.Domain;
 
@@ -62,7 +63,7 @@ public static class ReviewEndpoints
         return Results.Ok(new MyReviewDto(bought, review is null ? null : ToDto(review), review?.IsHidden ?? false));
     }
 
-    private static async Task<IResult> Upsert(Guid id, UpsertReviewRequest request, ClaimsPrincipal user, CatalogDbContext db,
+    private static async Task<IResult> Upsert(Guid id, UpsertReviewRequest request, ClaimsPrincipal user, CatalogDbContext db, ProductCache cache,
         CancellationToken ct)
     {
         var product = await db.Products.SingleOrDefaultAsync(p => p.Id == id, ct) ?? throw new NotFoundException($"Product {id} not found.");
@@ -85,11 +86,11 @@ public static class ReviewEndpoints
         }
 
         await db.SaveChangesAsync(ct);
-        await RefreshRatingAsync(db, product, ct);
+        await RefreshRatingAsync(db, product, cache, ct);
         return created ? Results.Created($"/api/products/{id}/reviews/me", ToDto(review)) : Results.Ok(ToDto(review));
     }
 
-    private static async Task<IResult> DeleteMine(Guid id, ClaimsPrincipal user, CatalogDbContext db, CancellationToken ct)
+    private static async Task<IResult> DeleteMine(Guid id, ClaimsPrincipal user, CatalogDbContext db, ProductCache cache, CancellationToken ct)
     {
         var product = await db.Products.SingleOrDefaultAsync(p => p.Id == id, ct) ?? throw new NotFoundException($"Product {id} not found.");
         var userId = user.GetUserId();
@@ -98,7 +99,7 @@ public static class ReviewEndpoints
         {
             db.Reviews.Remove(review);
             await db.SaveChangesAsync(ct);
-            await RefreshRatingAsync(db, product, ct);
+            await RefreshRatingAsync(db, product, cache, ct);
         }
 
         return Results.NoContent();
@@ -128,25 +129,29 @@ public static class ReviewEndpoints
         return Results.Ok(new PagedResult<AdminReviewDto>(items, p, size, total));
     }
 
-    private static async Task<IResult> SetVisibility(Guid reviewId, ReviewVisibilityRequest request, CatalogDbContext db,
+    private static async Task<IResult> SetVisibility(Guid reviewId, ReviewVisibilityRequest request, CatalogDbContext db, ProductCache cache,
         CancellationToken ct)
     {
         var review = await db.Reviews.SingleOrDefaultAsync(r => r.Id == reviewId, ct) ?? throw new NotFoundException($"Review {reviewId} not found.");
         var product = await db.Products.SingleAsync(p => p.Id == review.ProductId, ct);
         review.SetHidden(request.Hidden, request.Reason);
         await db.SaveChangesAsync(ct);
-        await RefreshRatingAsync(db, product, ct);
+        await RefreshRatingAsync(db, product, cache, ct);
         return Results.Ok(ToAdminDto(review, product.Name));
     }
 
     // recomputed from the table rather than adjusted in place, so a missed update heals on the next write
-    internal static async Task RefreshRatingAsync(CatalogDbContext db, Product product, CancellationToken ct)
+    internal static async Task RefreshRatingAsync(CatalogDbContext db, Product product, ProductCache? cache, CancellationToken ct)
     {
         var visible = db.Reviews.Where(r => r.ProductId == product.Id && !r.IsHidden);
         var count = await visible.CountAsync(ct);
         var average = count == 0 ? 0 : await visible.AverageAsync(r => (decimal)r.Rating, ct);
         product.SetRating(count, average);
         await db.SaveChangesAsync(ct);
+        if (cache is not null)
+        {
+            await cache.InvalidateAsync(product.Id, product.Slug);
+        }
     }
 
     // "Jane Doe" -> "Jane D."

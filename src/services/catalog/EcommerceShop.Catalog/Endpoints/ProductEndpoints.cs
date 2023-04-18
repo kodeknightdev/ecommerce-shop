@@ -5,6 +5,7 @@ using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Errors;
 using EcommerceShop.BuildingBlocks.Kafka;
 using EcommerceShop.BuildingBlocks.Validation;
+using EcommerceShop.Catalog.Caching;
 using EcommerceShop.Catalog.Data;
 using EcommerceShop.Catalog.Domain;
 using EcommerceShop.Contracts;
@@ -65,18 +66,26 @@ public static partial class ProductEndpoints
         return Results.Ok(new PagedResult<ProductSummaryDto>(items, page, pageSize, total));
     }
 
-    private static async Task<IResult> GetById(Guid id, CatalogDbContext db, CancellationToken ct)
+    private static async Task<IResult> GetById(Guid id, CatalogDbContext db, ProductCache cache, HttpContext http, CancellationToken ct)
     {
-        var product = await db.Products.AsNoTracking().Include(p => p.Category).SingleOrDefaultAsync(p => p.Id == id, ct)
-                      ?? throw new NotFoundException($"Product {id} not found.");
-        return Results.Ok(ToDetail(product));
+        var (product, hit) = await cache.GetOrLoadAsync(ProductCache.IdKey(id), async () =>
+        {
+            var entity = await db.Products.AsNoTracking().Include(p => p.Category).SingleOrDefaultAsync(p => p.Id == id, ct);
+            return entity is null ? null : ToDetail(entity);
+        }, ct);
+        http.Response.Headers["X-Cache"] = hit ? "HIT" : "MISS";
+        return Results.Ok(product ?? throw new NotFoundException($"Product {id} not found."));
     }
 
-    private static async Task<IResult> GetBySlug(string slug, CatalogDbContext db, CancellationToken ct)
+    private static async Task<IResult> GetBySlug(string slug, CatalogDbContext db, ProductCache cache, HttpContext http, CancellationToken ct)
     {
-        var product = await db.Products.AsNoTracking().Include(p => p.Category).SingleOrDefaultAsync(p => p.Slug == slug, ct)
-                      ?? throw new NotFoundException($"Product '{slug}' not found.");
-        return Results.Ok(ToDetail(product));
+        var (product, hit) = await cache.GetOrLoadAsync(ProductCache.SlugKey(slug), async () =>
+        {
+            var entity = await db.Products.AsNoTracking().Include(p => p.Category).SingleOrDefaultAsync(p => p.Slug == slug, ct);
+            return entity is null ? null : ToDetail(entity);
+        }, ct);
+        http.Response.Headers["X-Cache"] = hit ? "HIT" : "MISS";
+        return Results.Ok(product ?? throw new NotFoundException($"Product '{slug}' not found."));
     }
 
     private static async Task<IResult> Create(UpsertProductRequest request, CatalogDbContext db, CancellationToken ct)
@@ -102,7 +111,7 @@ public static partial class ProductEndpoints
     }
 
     private static async Task<IResult> Update(Guid id, UpsertProductRequest request, CatalogDbContext db, IEventPublisher publisher,
-        ILoggerFactory loggers, CancellationToken ct)
+        ProductCache cache, ILoggerFactory loggers, CancellationToken ct)
     {
         var product = await db.Products.SingleOrDefaultAsync(p => p.Id == id, ct) ?? throw new NotFoundException($"Product {id} not found.");
         await EnsureCategoryExists(db, request.CategoryId, ct);
@@ -112,9 +121,11 @@ public static partial class ProductEndpoints
         }
 
         var slug = product.Name == request.Name ? product.Slug : await UniqueSlug(db, Slugify(request.Name), id, ct);
+        var oldSlug = product.Slug;
         var oldPrice = product.Update(request.CategoryId, request.Name, slug, request.Description, request.Price, request.ImageUrl,
             request.Attributes ?? new Dictionary<string, string>(), request.IsActive);
         await db.SaveChangesAsync(ct);
+        await cache.InvalidateAsync(product.Id, oldSlug, product.Slug);
 
         if (oldPrice is not null)
         {
@@ -134,11 +145,12 @@ public static partial class ProductEndpoints
         return Results.Ok(ToDetail(product));
     }
 
-    private static async Task<IResult> Deactivate(Guid id, CatalogDbContext db, CancellationToken ct)
+    private static async Task<IResult> Deactivate(Guid id, CatalogDbContext db, ProductCache cache, CancellationToken ct)
     {
         var product = await db.Products.SingleOrDefaultAsync(p => p.Id == id, ct) ?? throw new NotFoundException($"Product {id} not found.");
         product.Deactivate();
         await db.SaveChangesAsync(ct);
+        await cache.InvalidateAsync(product.Id, product.Slug);
         return Results.NoContent();
     }
 
