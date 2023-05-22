@@ -19,7 +19,10 @@ builder.Services.AddHealthChecks().AddDbContextCheck<PaymentsDbContext>("postgre
 builder.Services.AddEcommerceShopJwt(builder.Configuration);
 builder.Services.AddEcommerceShopKafka(builder.Configuration);
 
-builder.Services.AddSingleton<IPaymentProvider>(_ => new MockPaymentProvider());
+using (var loggerFactory = LoggerFactory.Create(l => l.AddConsole()))
+{
+    builder.Services.AddPaymentProvider(builder.Configuration, loggerFactory.CreateLogger("Payments"));
+}
 
 builder.Services.AddScoped<PaymentProcessor>();
 builder.Services.AddOutboxRelay<PaymentsDbContext>(builder.Configuration);
