@@ -23,8 +23,25 @@ instead of charging again.
 
 ## Kafka
 
-- Consumes (group `payments`): `inventory.stock-reserved` and its `.retry` topic
-- Produces: `payments.payment-succeeded`, `payments.payment-failed`
+- Consumes (group `payments`): `inventory.stock-reserved`, `orders.order-cancelled` and their `.retry` topics
+- Produces: `payments.payment-succeeded`, `payments.payment-failed`, `payments.payment-refunded`
+
+## Reconciliation
+
+Every 15 minutes (`Reconciliation__IntervalMinutes`) and on demand from the admin page,
+[ReconciliationService.cs](EcommerceShop.Payments/Application/ReconciliationService.cs) compares the
+last 7 days of payments with the provider and with the orders it knows were cancelled
+(`orders.order-cancelled`, kept in `cancelled_orders`):
+
+| Finding | What happens |
+|---|---|
+| Charged, but the order was cancelled | Refunded automatically, `payments.payment-refunded` published |
+| Recorded as failed, but the provider took the money | Refunded automatically |
+| Amount or status differs from the provider, or the provider has no such payment | Recorded for review, nothing changed |
+
+Refunds use `refund-<orderId>` as the idempotency key, so a retried run never refunds twice, and a
+Postgres advisory lock keeps two replicas from running at once. The mock provider remembers its
+charges in memory only; after a restart older payments are counted as *unverified* rather than flagged.
 
 ## Run
 

@@ -9,6 +9,7 @@ public static class EventTypes
     public const string StockRejected = "StockRejected";
     public const string PaymentSucceeded = "PaymentSucceeded";
     public const string PaymentFailed = "PaymentFailed";
+    public const string PaymentRefunded = "PaymentRefunded";
     public const string ProductPriceChanged = "ProductPriceChanged";
 }
 
@@ -38,6 +39,9 @@ public sealed record StockRejected(Guid OrderId, string Reason);
 public sealed record PaymentSucceeded(Guid OrderId, Guid PaymentId, decimal Amount, string Currency, string Provider, string? ProviderReference);
 
 public sealed record PaymentFailed(Guid OrderId, Guid PaymentId, Guid UserId, string Email, decimal Amount, string Reason);
+
+public sealed record PaymentRefunded(Guid OrderId, Guid PaymentId, Guid UserId, string Email, decimal Amount, string Currency, string Reason,
+    string? RefundReference);
 
 public sealed record OrderConfirmed(Guid OrderId, Guid UserId, string Email, decimal Total, string Currency, IReadOnlyList<OrderLineDto> Items);
 

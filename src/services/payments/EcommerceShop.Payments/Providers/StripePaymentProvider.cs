@@ -44,6 +44,53 @@ public sealed class StripePaymentProvider : IPaymentProvider
             return ChargeResult.Failure(ex.StripeError.Message ?? "Payment was declined.", ex.StripeError.PaymentIntent?.Id);
         }
     }
+
+    public async Task<ProviderPayment?> LookupAsync(string providerReference, CancellationToken ct)
+    {
+        var service = new PaymentIntentService(_client);
+        try
+        {
+            var intent = await service.GetAsync(providerReference, new PaymentIntentGetOptions { Expand = new List<string> { "latest_charge" } },
+                cancellationToken: ct);
+            var status = intent.Status switch
+            {
+                "succeeded" => ProviderPaymentStatus.Succeeded,
+                "canceled" or "requires_payment_method" => ProviderPaymentStatus.Failed,
+                _ => ProviderPaymentStatus.Pending
+            };
+            return new ProviderPayment(intent.Id, status, intent.Amount / 100m, intent.Currency.ToUpperInvariant(),
+                (intent.LatestCharge?.AmountRefunded ?? 0) / 100m);
+        }
+        catch (StripeException ex) when (ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return new ProviderPayment(providerReference, ProviderPaymentStatus.NotFound, 0, string.Empty, 0);
+        }
+    }
+
+    public async Task<RefundResult> RefundAsync(RefundRequest request, CancellationToken ct)
+    {
+        var service = new RefundService(_client);
+        var options = new RefundCreateOptions
+        {
+            PaymentIntent = request.ProviderReference,
+            Amount = (long)Math.Round(request.Amount * 100m, MidpointRounding.AwayFromZero),
+            Reason = "requested_by_customer",
+            Metadata = new Dictionary<string, string> { ["orderId"] = request.OrderId.ToString(), ["reason"] = request.Reason }
+        };
+
+        try
+        {
+            var refund = await service.CreateAsync(options, new RequestOptions { IdempotencyKey = request.IdempotencyKey }, ct);
+            return refund.Status is "succeeded" or "pending"
+                ? new RefundResult(true, refund.Id, null)
+                : new RefundResult(false, refund.Id, $"Refund ended in status '{refund.Status}'.");
+        }
+        catch (StripeException ex) when (ex.StripeError?.Type is "invalid_request_error")
+        {
+            _logger.LogWarning("Stripe refused the refund for order {OrderId}: {Message}", request.OrderId, ex.StripeError.Message);
+            return new RefundResult(false, null, ex.StripeError.Message);
+        }
+    }
 }
 
 public static class PaymentProviderRegistration

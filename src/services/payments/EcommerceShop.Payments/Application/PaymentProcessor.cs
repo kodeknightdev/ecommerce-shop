@@ -34,6 +34,15 @@ public sealed class PaymentProcessor
         }
 
         var payment = await _db.Payments.SingleOrDefaultAsync(p => p.OrderId == e.OrderId, ct);
+        if (payment is null && await _db.CancelledOrders.AnyAsync(c => c.OrderId == e.OrderId, ct))
+        {
+            // e.g. the reservation expired while we were down; charging now would only mean a refund later
+            _logger.LogInformation("Order {OrderId} is already cancelled; not charging", e.OrderId);
+            _db.MarkProcessed(eventId, EventTypes.StockReserved);
+            await _db.SaveChangesAsync(ct);
+            return null;
+        }
+
         if (payment is not null)
         {
             // already charged (e.g. inventory answered twice) - just re-announce the outcome
@@ -61,6 +70,23 @@ public sealed class PaymentProcessor
         _db.MarkProcessed(eventId, EventTypes.StockReserved);
         await _db.SaveChangesAsync(ct);
         return payment;
+    }
+
+    // remembered so reconciliation can refund a charge that raced the cancellation
+    public async Task HandleOrderCancelledAsync(Guid eventId, OrderCancelled e, DateTimeOffset occurredAt, CancellationToken ct)
+    {
+        if (await _db.AlreadyProcessedAsync(eventId, ct))
+        {
+            return;
+        }
+
+        if (!await _db.CancelledOrders.AnyAsync(c => c.OrderId == e.OrderId, ct))
+        {
+            _db.CancelledOrders.Add(new CancelledOrder(e.OrderId, e.Reason, occurredAt));
+        }
+
+        _db.MarkProcessed(eventId, EventTypes.OrderCancelled);
+        await _db.SaveChangesAsync(ct);
     }
 
     private void EnqueueOutcome(Payment payment)

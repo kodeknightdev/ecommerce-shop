@@ -3,7 +3,8 @@ namespace EcommerceShop.Payments.Domain;
 public enum PaymentStatus
 {
     Succeeded,
-    Failed
+    Failed,
+    Refunded
 }
 
 // one per order (unique index on OrderId)
@@ -36,6 +37,9 @@ public sealed class Payment
     public string? FailureReason { get; private set; }
     public string IdempotencyKey { get; private set; } = string.Empty;
     public DateTimeOffset CreatedAt { get; private set; }
+    public string? RefundReference { get; private set; }
+    public string? RefundReason { get; private set; }
+    public DateTimeOffset? RefundedAt { get; private set; }
 
     public void Succeed(string? providerReference)
     {
@@ -50,4 +54,29 @@ public sealed class Payment
         FailureReason = reason;
         ProviderReference = providerReference;
     }
+
+    public void MarkRefunded(string refundReference, string reason)
+    {
+        Status = PaymentStatus.Refunded;
+        RefundReference = refundReference;
+        RefundReason = reason;
+        RefundedAt = DateTimeOffset.UtcNow;
+    }
+}
+
+// from orders.order-cancelled, so payments knows which charges should not stand
+public sealed class CancelledOrder
+{
+    private CancelledOrder() { }
+
+    public CancelledOrder(Guid orderId, string reason, DateTimeOffset cancelledAt)
+    {
+        OrderId = orderId;
+        Reason = reason;
+        CancelledAt = cancelledAt;
+    }
+
+    public Guid OrderId { get; private set; }
+    public string Reason { get; private set; } = string.Empty;
+    public DateTimeOffset CancelledAt { get; private set; }
 }

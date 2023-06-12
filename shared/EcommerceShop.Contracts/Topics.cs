@@ -10,11 +10,12 @@ public static class Topics
     public const string StockRejected = "inventory.stock-rejected";
     public const string PaymentSucceeded = "payments.payment-succeeded";
     public const string PaymentFailed = "payments.payment-failed";
+    public const string PaymentRefunded = "payments.payment-refunded";
     public const string ProductPriceChanged = "catalog.product-price-changed";
 
     public static readonly string[] All =
     {
-        OrderPlaced, OrderConfirmed, OrderCancelled, StockReserved, StockRejected, PaymentSucceeded, PaymentFailed, ProductPriceChanged
+        OrderPlaced, OrderConfirmed, OrderCancelled, StockReserved, StockRejected, PaymentSucceeded, PaymentFailed, PaymentRefunded, ProductPriceChanged
     };
 
     public const string RetrySuffix = ".retry";

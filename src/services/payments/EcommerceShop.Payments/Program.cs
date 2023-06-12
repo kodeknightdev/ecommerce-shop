@@ -25,6 +25,9 @@ using (var loggerFactory = LoggerFactory.Create(l => l.AddConsole()))
 }
 
 builder.Services.AddScoped<PaymentProcessor>();
+builder.Services.Configure<ReconciliationOptions>(builder.Configuration.GetSection(ReconciliationOptions.SectionName));
+builder.Services.AddScoped<ReconciliationService>();
+builder.Services.AddHostedService<ReconciliationWorker>();
 builder.Services.AddOutboxRelay<PaymentsDbContext>(builder.Configuration);
 builder.Services.AddHostedService<PaymentsConsumer>();
 
