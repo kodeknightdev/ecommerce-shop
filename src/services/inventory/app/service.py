@@ -142,6 +142,7 @@ class InventoryService:
         self.session.commit()
         for reservation in expired:
             self._invalidate(*[i.product_id for i in reservation.items])
+            self._publish_rejected(reservation.order_id, "Reservation expired before payment completed")
         return len(expired)
 
     def adjust(self, product_id: str, delta: int, reason: str, sku: str | None = None, low_stock_threshold: int | None = None) -> StockItem:
