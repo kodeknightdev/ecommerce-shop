@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 
 export const TEMPLATES_DIR = Symbol('TEMPLATES_DIR');
-export const TEMPLATE_NAMES = ['order-placed', 'order-confirmed', 'order-cancelled', 'payment-failed'] as const;
+export const TEMPLATE_NAMES = ['order-placed', 'order-confirmed', 'order-cancelled', 'payment-failed', 'payment-refunded'] as const;
 export type TemplateName = (typeof TEMPLATE_NAMES)[number];
 
 @Injectable()

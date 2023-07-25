@@ -9,6 +9,7 @@ export const TOPICS = {
   orderConfirmed: 'orders.order-confirmed',
   orderCancelled: 'orders.order-cancelled',
   paymentFailed: 'payments.payment-failed',
+  paymentRefunded: 'payments.payment-refunded',
 } as const;
 
 export interface Envelope<T = Record<string, any>> {
@@ -46,6 +47,8 @@ export class NotificationsService {
         return { template: 'order-cancelled', subject: `Order ${common.orderNumber} was cancelled`, to: p.email, data: { ...common, ...p } };
       case TOPICS.paymentFailed:
         return { template: 'payment-failed', subject: `Payment failed for order ${common.orderNumber}`, to: p.email, data: { ...common, ...p } };
+      case TOPICS.paymentRefunded:
+        return { template: 'payment-refunded', subject: `Refund for order ${common.orderNumber}`, to: p.email, data: { ...common, ...p } };
       default:
         return null;
     }
