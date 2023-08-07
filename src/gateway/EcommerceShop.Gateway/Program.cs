@@ -3,12 +3,14 @@ using EcommerceShop.BuildingBlocks.Correlation;
 using EcommerceShop.BuildingBlocks.Errors;
 using EcommerceShop.BuildingBlocks.Health;
 using EcommerceShop.BuildingBlocks.Logging;
+using EcommerceShop.Gateway;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddEcommerceShopLogging("gateway");
 builder.Services.AddEcommerceShopProblemDetails();
 builder.Services.AddEcommerceShopJwt(builder.Configuration);
+builder.Services.AddGatewayRateLimiting(builder.Configuration);
 builder.Services.AddReverseProxy().LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 builder.Services.AddHealthChecks();
 
@@ -24,6 +26,7 @@ var app = builder.Build();
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseEcommerceShopExceptionHandler();
 app.UseCors();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
