@@ -35,6 +35,8 @@ export interface ProductSummary {
   categoryId: string;
   categoryName: string;
   isActive: boolean;
+  rating: number;
+  reviewCount: number;
 }
 
 export interface ProductDetail extends ProductSummary {
@@ -207,4 +209,28 @@ export interface OrderDetailsView {
   payment: PaymentInfo | null;
   products: ProductSnapshot[];
   warnings: string[];
+}
+
+export interface Review {
+  id: string;
+  productId: string;
+  authorName: string;
+  rating: number;
+  title?: string | null;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// GET /api/products/{id}/reviews
+export interface ReviewPage extends Paged<Review> {
+  averageRating: number;
+  reviewCount: number;
+  distribution: Record<string, number>;
+}
+
+export interface MyReview {
+  canReview: boolean;
+  review: Review | null;
+  hidden: boolean;
 }

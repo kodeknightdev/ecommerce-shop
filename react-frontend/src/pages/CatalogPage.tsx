@@ -11,6 +11,7 @@ const SORTS = [
   { value: 'price_asc', label: 'Price: low to high' },
   { value: 'price_desc', label: 'Price: high to low' },
   { value: 'newest', label: 'Newest' },
+  { value: 'rating', label: 'Top rated' },
 ];
 
 const num = (v: string | null) => (v ? Number(v) : undefined);

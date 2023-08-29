@@ -1,7 +1,7 @@
 import { api, toQuery } from './client';
 import type {
-  AuthResponse, Cart, Category, OrderDetail, OrderDetailsView, OrderSummary, Paged, ProductDetail, ProductSummary, SalesSummary,
-  ShippingAddress, StockItemAdmin, StockLevel, User,
+  AuthResponse, Cart, Category, MyReview, OrderDetail, OrderDetailsView, OrderSummary, Paged, ProductDetail, ProductSummary, Review,
+  ReviewPage, SalesSummary, ShippingAddress, StockItemAdmin, StockLevel, User,
 } from './types';
 
 export interface ProductFilters {
@@ -41,6 +41,15 @@ export const catalogApi = {
   createProduct: (input: ProductInput) => api<ProductDetail>('/api/products', { method: 'POST', body: input }),
   updateProduct: (id: string, input: ProductInput) => api<ProductDetail>(`/api/products/${id}`, { method: 'PUT', body: input }),
   deactivateProduct: (id: string) => api<void>(`/api/products/${id}`, { method: 'DELETE' }),
+};
+
+export const reviewsApi = {
+  list: (productId: string, page = 1, sort = 'newest') =>
+    api<ReviewPage>(`/api/products/${productId}/reviews${toQuery({ page, sort, pageSize: 5 })}`, { auth: false }),
+  mine: (productId: string) => api<MyReview>(`/api/products/${productId}/reviews/me`),
+  save: (productId: string, input: { rating: number; title?: string; comment: string }) =>
+    api<Review>(`/api/products/${productId}/reviews/me`, { method: 'PUT', body: input }),
+  remove: (productId: string) => api<void>(`/api/products/${productId}/reviews/me`, { method: 'DELETE' }),
 };
 
 export const inventoryApi = {
