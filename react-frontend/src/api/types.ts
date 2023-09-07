@@ -186,10 +186,11 @@ export interface PaymentInfo {
   amount: number;
   currency: string;
   provider: string;
-  status: 'Succeeded' | 'Failed';
+  status: 'Succeeded' | 'Failed' | 'Refunded';
   failureReason?: string | null;
   providerReference?: string | null;
   createdAt: string;
+  refundedAt?: string | null;
 }
 
 export interface ProductSnapshot {
