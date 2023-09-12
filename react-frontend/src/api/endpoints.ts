@@ -1,7 +1,7 @@
 import { api, toQuery } from './client';
 import type {
-  AuthResponse, Cart, Category, MyReview, OrderDetail, OrderDetailsView, OrderSummary, Paged, ProductDetail, ProductSummary, Review,
-  ReviewPage, SalesSummary, ShippingAddress, StockItemAdmin, StockLevel, User,
+  AdminReview, AuthResponse, Cart, Category, MyReview, OrderDetail, OrderDetailsView, OrderSummary, Paged, ProductDetail, ProductSummary,
+  ReconciliationRun, Review, ReviewPage, SalesSummary, ShippingAddress, StockItemAdmin, StockLevel, User,
 } from './types';
 
 export interface ProductFilters {
@@ -81,6 +81,12 @@ export const adminApi = {
   orders: (f: { status?: string; email?: string; from?: string; to?: string; page?: number }) =>
     api<Paged<OrderSummary>>(`/api/admin/orders${toQuery(f)}`),
   salesSummary: (days: number) => api<SalesSummary>(`/api/admin/sales-summary${toQuery({ days })}`),
+  reviews: (f: { hidden?: boolean; page?: number }) => api<Paged<AdminReview>>(`/api/products/reviews${toQuery(f)}`),
+  setReviewHidden: (id: string, hidden: boolean, reason?: string) =>
+    api<AdminReview>(`/api/products/reviews/${id}/visibility`, { method: 'PUT', body: { hidden, reason } }),
+  reconciliationRuns: () => api<ReconciliationRun[]>('/api/payments/reconciliation/runs'),
+  reconciliationRun: (id: string) => api<ReconciliationRun>(`/api/payments/reconciliation/runs/${id}`),
+  reconcileNow: () => api<ReconciliationRun>('/api/payments/reconciliation/runs', { method: 'POST' }),
 };
 
 export const paymentsApi = {

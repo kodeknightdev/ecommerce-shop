@@ -10,6 +10,13 @@ import { OrderDetailPage } from './pages/OrderDetailPage';
 import { OrdersPage } from './pages/OrdersPage';
 import { ProductPage } from './pages/ProductPage';
 import { RegisterPage } from './pages/RegisterPage';
+import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
+import { AdminInventoryPage } from './pages/admin/AdminInventoryPage';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminOrdersPage } from './pages/admin/AdminOrdersPage';
+import { AdminProductsPage } from './pages/admin/AdminProductsPage';
+import { AdminReconciliationPage } from './pages/admin/AdminReconciliationPage';
+import { AdminReviewsPage } from './pages/admin/AdminReviewsPage';
 
 export function App() {
   return (
@@ -23,6 +30,14 @@ export function App() {
         <Route path="checkout" element={<RequireAuth><CheckoutPage /></RequireAuth>} />
         <Route path="orders" element={<RequireAuth><OrdersPage /></RequireAuth>} />
         <Route path="orders/:id" element={<RequireAuth><OrderDetailPage /></RequireAuth>} />
+        <Route path="admin" element={<RequireAuth admin><AdminLayout /></RequireAuth>}>
+          <Route index element={<AdminDashboardPage />} />
+          <Route path="orders" element={<AdminOrdersPage />} />
+          <Route path="products" element={<AdminProductsPage />} />
+          <Route path="inventory" element={<AdminInventoryPage />} />
+          <Route path="reviews" element={<AdminReviewsPage />} />
+          <Route path="reconciliation" element={<AdminReconciliationPage />} />
+        </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

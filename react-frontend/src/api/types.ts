@@ -235,3 +235,33 @@ export interface MyReview {
   review: Review | null;
   hidden: boolean;
 }
+
+export interface AdminReview extends Review {
+  productName: string;
+  userId: string;
+  hidden: boolean;
+  hiddenReason?: string | null;
+}
+
+export interface ReconciliationIssue {
+  id: string;
+  paymentId: string;
+  orderId: string;
+  kind: 'PaidButCancelled' | 'ChargedButMarkedFailed' | 'StatusMismatch' | 'AmountMismatch' | 'MissingAtProvider';
+  resolution: 'Refunded' | 'RefundFailed' | 'NeedsReview';
+  detail: string;
+  createdAt: string;
+}
+
+export interface ReconciliationRun {
+  id: string;
+  trigger: 'schedule' | 'manual';
+  since: string;
+  startedAt: string;
+  finishedAt?: string | null;
+  checked: number;
+  unverified: number;
+  issueCount: number;
+  refunded: number;
+  issues?: ReconciliationIssue[] | null;
+}
