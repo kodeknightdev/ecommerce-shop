@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.Net.Client" Version="2.51.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\services\catalog\EcommerceShop.Catalog\EcommerceShop.Catalog.csproj" />
+    <ProjectReference Include="..\EcommerceShop.TestSupport\EcommerceShop.TestSupport.csproj" />
+  </ItemGroup>
+
+</Project>
