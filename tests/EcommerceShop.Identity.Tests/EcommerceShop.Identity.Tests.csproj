@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\services\identity\EcommerceShop.Identity\EcommerceShop.Identity.csproj" />
+    <ProjectReference Include="..\EcommerceShop.TestSupport\EcommerceShop.TestSupport.csproj" />
+  </ItemGroup>
+
+</Project>
