@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddEcommerceShopLogging("gateway");
 builder.Services.AddEcommerceShopProblemDetails();
 builder.Services.AddEcommerceShopJwt(builder.Configuration);
-builder.Services.AddGatewayRateLimiting(builder.Configuration);
+builder.Services.AddGatewayRateLimiting();
 builder.Services.AddReverseProxy().LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 builder.Services.AddHttpClient("downstream-health", c => c.Timeout = TimeSpan.FromSeconds(2));
 builder.Services.AddHealthChecks().AddCheck<DownstreamHealthCheck>("downstream", tags: new[] { HealthEndpoints.ReadyTag });
