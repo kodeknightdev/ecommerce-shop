@@ -1,0 +1,76 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ecommerce-shop-dev
+
+resources:
+  - ../../base
+  - infra/postgres.yaml
+  - infra/redis.yaml
+  - infra/kafka.yaml
+  - infra/mailhog.yaml
+
+configMapGenerator:
+  - name: kafka-topic-script
+    files:
+      - create-topics.sh=infra/create-topics.sh
+  - name: ecommerce-shop-config
+    behavior: merge
+    literals:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - SHOP_URL=https://shop-dev.example.com
+
+patches:
+  - target:
+      kind: Namespace
+      name: ecommerce-shop
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: ecommerce-shop-dev
+  - target:
+      kind: Ingress
+      name: ecommerce-shop
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: shop-dev.example.com
+  # no need to scale in dev
+  - target:
+      kind: HorizontalPodAutoscaler
+    patch: |-
+      - op: replace
+        path: /spec/minReplicas
+        value: 1
+      - op: replace
+        path: /spec/maxReplicas
+        value: 2
+
+images:
+  - name: ecommerceshop/identity
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/identity
+    newTag: dev
+  - name: ecommerceshop/catalog
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/catalog
+    newTag: dev
+  - name: ecommerceshop/orders
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/orders
+    newTag: dev
+  - name: ecommerceshop/payments
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/payments
+    newTag: dev
+  - name: ecommerceshop/inventory
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/inventory
+    newTag: dev
+  - name: ecommerceshop/cart
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/cart
+    newTag: dev
+  - name: ecommerceshop/email
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/email
+    newTag: dev
+  - name: ecommerceshop/gateway
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/gateway
+    newTag: dev
+  - name: ecommerceshop/web
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/web
+    newTag: dev
