@@ -1,0 +1,92 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ecommerce-shop
+
+resources:
+  - ../../base
+  - pdb.yaml
+
+# managed services (placeholder hostnames)
+configMapGenerator:
+  - name: ecommerce-shop-config
+    behavior: merge
+    literals:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - POSTGRES_HOST=ecommerceshop-pg.postgres.database.azure.com
+      - REDIS_HOST=ecommerceshop-redis.redis.cache.windows.net
+      - KAFKA_BOOTSTRAP_SERVERS=kafka.ecommerce-shop-infra.svc.cluster.local:9092
+      - SMTP_HOST=smtp.example.com
+      - SMTP_PORT=587
+      - SHOP_URL=https://shop.example.com
+
+replicas:
+  - name: identity
+    count: 2
+  - name: payments
+    count: 2
+  - name: inventory
+    count: 2
+  - name: cart
+    count: 2
+  - name: email
+    count: 2
+  - name: gateway
+    count: 3
+  - name: web
+    count: 2
+
+patches:
+  - path: resources-patch.yaml
+  - target:
+      kind: HorizontalPodAutoscaler
+      name: orders
+    patch: |-
+      - op: replace
+        path: /spec/minReplicas
+        value: 3
+      - op: replace
+        path: /spec/maxReplicas
+        value: 12
+  - target:
+      kind: Ingress
+      name: ecommerce-shop
+    patch: |-
+      - op: add
+        path: /spec/tls
+        value:
+          - hosts:
+              - shop.example.com
+            secretName: ecommerce-shop-tls
+      - op: add
+        path: /metadata/annotations/nginx.ingress.kubernetes.io~1ssl-redirect
+        value: "true"
+
+images:
+  - name: ecommerceshop/identity
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/identity
+    newTag: 1.0.0
+  - name: ecommerceshop/catalog
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/catalog
+    newTag: 1.0.0
+  - name: ecommerceshop/orders
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/orders
+    newTag: 1.0.0
+  - name: ecommerceshop/payments
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/payments
+    newTag: 1.0.0
+  - name: ecommerceshop/inventory
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/inventory
+    newTag: 1.0.0
+  - name: ecommerceshop/cart
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/cart
+    newTag: 1.0.0
+  - name: ecommerceshop/email
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/email
+    newTag: 1.0.0
+  - name: ecommerceshop/gateway
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/gateway
+    newTag: 1.0.0
+  - name: ecommerceshop/web
+    newName: ecommerceshopacr.azurecr.io/ecommerce-shop/web
+    newTag: 1.0.0
