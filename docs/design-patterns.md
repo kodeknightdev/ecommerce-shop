@@ -211,7 +211,7 @@ actually succeeded. A retried checkout must not create a second order, and a ret
 charge twice.
 
 **Implementation.**
-- **`POST /api/orders`** accepts an `Idempotency-Key` header. The React checkout generates one per checkout page ([CheckoutPage.tsx](../react-frontend/src/pages/CheckoutPage.tsx)). `(userId, key) → orderId` is stored in `idempotency_keys`, so a repeat returns the original order with 200 instead of 201 ([PlaceOrderService.cs](../src/services/orders/EcommerceShop.Orders/Application/PlaceOrderService.cs)).
+- **`POST /api/orders`** accepts an `Idempotency-Key` header. The React checkout derives it from the user and the cart contents and keeps it in `sessionStorage` until the order is accepted ([checkoutKey.ts](../react-frontend/src/lib/checkoutKey.ts), used by [CheckoutPage.tsx](../react-frontend/src/pages/CheckoutPage.tsx)). A reload after a lost response therefore retries with the same key instead of creating a second order; a changed cart is a new purchase with a new key. `(userId, key) → orderId` is stored in `idempotency_keys`, so a repeat returns the original order with 200 instead of 201 ([PlaceOrderService.cs](../src/services/orders/EcommerceShop.Orders/Application/PlaceOrderService.cs)).
 - **Payments** sends the **order id** as the Stripe idempotency key (`PaymentProcessor.IdempotencyKeyFor`, passed in `RequestOptions` by [StripePaymentProvider.cs](../src/services/payments/EcommerceShop.Payments/Providers/StripePaymentProvider.cs)). Even if our own database write failed after Stripe charged, the retry gets the same PaymentIntent back.
 - **Refunds** made by reconciliation use `refund-<orderId>` the same way, so a run that crashed half-way, or two runs racing, can never refund an order twice.
 
