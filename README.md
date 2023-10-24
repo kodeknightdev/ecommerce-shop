@@ -48,6 +48,12 @@ On macOS port 5000 may be taken by AirPlay Receiver - set `GATEWAY_PORT` in `.en
 Running `docker compose up` from inside `deploy/` also loads the dev override, which publishes every
 service on its own host port.
 
+To start again from fresh demo data, drop the volumes; the next `up` migrates and seeds again:
+
+```bash
+docker compose -f deploy/docker-compose.yml down -v
+```
+
 ## Seed data and demo logins
 
 In Development (the compose default) the seeders create 6 categories, 40 products with stock levels
