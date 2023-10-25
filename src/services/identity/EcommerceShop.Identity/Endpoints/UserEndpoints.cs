@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Errors;
 using EcommerceShop.BuildingBlocks.Validation;
 using EcommerceShop.Identity.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Identity.Endpoints;
 

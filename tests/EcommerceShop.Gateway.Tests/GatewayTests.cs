@@ -1,9 +1,9 @@
 using System.Net;
+using EcommerceShop.Contracts;
+using EcommerceShop.TestSupport;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
-using EcommerceShop.Contracts;
-using EcommerceShop.TestSupport;
 
 namespace EcommerceShop.Gateway.Tests;
 

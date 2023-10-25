@@ -1,11 +1,11 @@
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
 using EcommerceShop.BuildingBlocks.Kafka;
 using EcommerceShop.Contracts;
 using EcommerceShop.Orders.Application;
 using EcommerceShop.Orders.Data;
 using EcommerceShop.Orders.Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace EcommerceShop.Orders.UnitTests;
 

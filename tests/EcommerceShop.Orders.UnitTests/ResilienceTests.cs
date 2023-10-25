@@ -1,10 +1,10 @@
 using System.Net;
+using EcommerceShop.BuildingBlocks.Kafka;
+using EcommerceShop.Orders.Clients;
 using Grpc.Core;
 using Microsoft.Extensions.Logging.Abstractions;
 using Polly.Bulkhead;
 using Polly.CircuitBreaker;
-using EcommerceShop.BuildingBlocks.Kafka;
-using EcommerceShop.Orders.Clients;
 
 namespace EcommerceShop.Orders.UnitTests;
 
@@ -12,7 +12,12 @@ public class ResilienceTests
 {
     private static ResilienceOptions Options(int retries = 2, int timeoutSeconds = 1) => new()
     {
-        RetryCount = retries, TimeoutSeconds = timeoutSeconds, FailuresBeforeBreaking = 3, BreakSeconds = 30, MaxParallelization = 1, MaxQueuedActions = 0
+        RetryCount = retries,
+        TimeoutSeconds = timeoutSeconds,
+        FailuresBeforeBreaking = 3,
+        BreakSeconds = 30,
+        MaxParallelization = 1,
+        MaxQueuedActions = 0
     };
 
     [Fact]

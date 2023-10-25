@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Messaging;
 using EcommerceShop.Contracts;
 using EcommerceShop.Payments.Data;
 using EcommerceShop.Payments.Domain;
 using EcommerceShop.Payments.Providers;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Payments.Application;
 

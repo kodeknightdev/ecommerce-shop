@@ -2,8 +2,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using EcommerceShop.Contracts;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EcommerceShop.TestSupport;
 

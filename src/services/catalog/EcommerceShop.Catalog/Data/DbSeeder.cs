@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.Catalog.Domain;
 using EcommerceShop.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Catalog.Data;
 

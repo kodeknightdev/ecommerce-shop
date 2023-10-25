@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Health;
@@ -9,6 +8,7 @@ using EcommerceShop.Payments.Data;
 using EcommerceShop.Payments.Endpoints;
 using EcommerceShop.Payments.Messaging;
 using EcommerceShop.Payments.Providers;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

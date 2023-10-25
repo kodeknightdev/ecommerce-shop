@@ -1,5 +1,5 @@
-using FluentValidation;
 using EcommerceShop.Orders.Domain;
+using FluentValidation;
 
 namespace EcommerceShop.Orders.Application;
 

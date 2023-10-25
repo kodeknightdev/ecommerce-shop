@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Health;
@@ -8,6 +7,7 @@ using EcommerceShop.Catalog.Data;
 using EcommerceShop.Catalog.Endpoints;
 using EcommerceShop.Catalog.Grpc;
 using EcommerceShop.Catalog.Messaging;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

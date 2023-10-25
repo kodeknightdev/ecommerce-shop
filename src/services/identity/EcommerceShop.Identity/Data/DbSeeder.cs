@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.Contracts;
 using EcommerceShop.Identity.Auth;
 using EcommerceShop.Identity.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Identity.Data;
 

@@ -1,12 +1,12 @@
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using EcommerceShop.Contracts;
 using EcommerceShop.Payments.Application;
 using EcommerceShop.Payments.Data;
 using EcommerceShop.Payments.Domain;
 using EcommerceShop.Payments.Providers;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace EcommerceShop.Payments.Tests;
 

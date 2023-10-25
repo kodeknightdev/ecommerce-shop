@@ -1,11 +1,11 @@
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Errors;
 using EcommerceShop.BuildingBlocks.Validation;
 using EcommerceShop.Contracts;
 using EcommerceShop.Orders.Application;
 using EcommerceShop.Orders.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Orders.Endpoints;
 

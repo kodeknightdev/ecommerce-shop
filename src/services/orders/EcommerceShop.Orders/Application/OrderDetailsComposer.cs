@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Errors;
 using EcommerceShop.Orders.Clients;
 using EcommerceShop.Orders.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Orders.Application;
 

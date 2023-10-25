@@ -1,9 +1,9 @@
+using EcommerceShop.BuildingBlocks.Health;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using EcommerceShop.BuildingBlocks.Health;
 
 namespace EcommerceShop.Catalog.Caching;
 

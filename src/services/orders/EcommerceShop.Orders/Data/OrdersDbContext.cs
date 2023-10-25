@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Messaging;
 using EcommerceShop.Orders.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Orders.Data;
 

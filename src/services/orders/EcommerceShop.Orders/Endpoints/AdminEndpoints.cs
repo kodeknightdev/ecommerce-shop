@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.Orders.Application;
 using EcommerceShop.Orders.Data;
 using EcommerceShop.Orders.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Orders.Endpoints;
 

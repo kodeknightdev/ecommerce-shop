@@ -1,7 +1,7 @@
 using Confluent.Kafka;
+using EcommerceShop.BuildingBlocks.Kafka;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using EcommerceShop.BuildingBlocks.Kafka;
 
 namespace EcommerceShop.BuildingBlocks.Health;
 

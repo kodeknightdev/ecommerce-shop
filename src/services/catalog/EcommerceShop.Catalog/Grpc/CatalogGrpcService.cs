@@ -1,8 +1,8 @@
-using Grpc.Core;
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.Catalog.Data;
 using EcommerceShop.Catalog.Domain;
 using EcommerceShop.Protos.Catalog;
+using Grpc.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Catalog.Grpc;
 

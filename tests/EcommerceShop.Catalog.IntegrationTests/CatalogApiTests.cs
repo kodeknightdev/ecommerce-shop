@@ -1,13 +1,13 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Grpc.Net.Client;
 using EcommerceShop.BuildingBlocks.Kafka;
 using EcommerceShop.Catalog.Data;
 using EcommerceShop.Catalog.Endpoints;
 using EcommerceShop.Contracts;
 using EcommerceShop.Protos.Catalog;
 using EcommerceShop.TestSupport;
+using Grpc.Net.Client;
 
 namespace EcommerceShop.Catalog.IntegrationTests;
 

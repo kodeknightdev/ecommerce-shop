@@ -1,10 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using EcommerceShop.BuildingBlocks.Kafka;
 using EcommerceShop.BuildingBlocks.Messaging;
 using EcommerceShop.Catalog.Data;
 using EcommerceShop.Catalog.Domain;
 using EcommerceShop.Contracts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace EcommerceShop.Catalog.Messaging;
 
