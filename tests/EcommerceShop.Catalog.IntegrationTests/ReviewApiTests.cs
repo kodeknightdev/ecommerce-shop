@@ -1,13 +1,13 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
 using EcommerceShop.Catalog.Data;
 using EcommerceShop.Catalog.Endpoints;
 using EcommerceShop.Catalog.Messaging;
 using EcommerceShop.Contracts;
 using EcommerceShop.TestSupport;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace EcommerceShop.Catalog.IntegrationTests;
 

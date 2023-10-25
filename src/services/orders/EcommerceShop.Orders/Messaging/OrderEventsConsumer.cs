@@ -1,7 +1,7 @@
-using Microsoft.Extensions.Options;
 using EcommerceShop.BuildingBlocks.Kafka;
 using EcommerceShop.Contracts;
 using EcommerceShop.Orders.Application;
+using Microsoft.Extensions.Options;
 
 namespace EcommerceShop.Orders.Messaging;
 

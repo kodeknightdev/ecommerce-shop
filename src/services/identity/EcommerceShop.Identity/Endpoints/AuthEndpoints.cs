@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Errors;
 using EcommerceShop.BuildingBlocks.Validation;
@@ -7,6 +6,7 @@ using EcommerceShop.Contracts;
 using EcommerceShop.Identity.Auth;
 using EcommerceShop.Identity.Data;
 using EcommerceShop.Identity.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Identity.Endpoints;
 

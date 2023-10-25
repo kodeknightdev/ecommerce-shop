@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.Contracts;
 using EcommerceShop.Payments.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Payments.Data;
 

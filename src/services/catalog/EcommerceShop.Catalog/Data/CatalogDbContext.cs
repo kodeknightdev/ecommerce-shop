@@ -1,8 +1,8 @@
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using EcommerceShop.BuildingBlocks.Messaging;
 using EcommerceShop.Catalog.Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EcommerceShop.Catalog.Data;
 

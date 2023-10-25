@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.Identity.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Identity.Data;
 

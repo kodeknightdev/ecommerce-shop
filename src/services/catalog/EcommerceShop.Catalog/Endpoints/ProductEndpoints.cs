@@ -1,6 +1,4 @@
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Errors;
 using EcommerceShop.BuildingBlocks.Kafka;
@@ -9,6 +7,8 @@ using EcommerceShop.Catalog.Caching;
 using EcommerceShop.Catalog.Data;
 using EcommerceShop.Catalog.Domain;
 using EcommerceShop.Contracts;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Catalog.Endpoints;
 

@@ -1,11 +1,11 @@
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Errors;
 using EcommerceShop.Payments.Application;
 using EcommerceShop.Payments.Data;
 using EcommerceShop.Payments.Domain;
 using EcommerceShop.Payments.Providers;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Payments.Endpoints;
 

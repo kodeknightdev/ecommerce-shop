@@ -1,10 +1,10 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks;
 using EcommerceShop.BuildingBlocks.Auth;
 using EcommerceShop.BuildingBlocks.Health;
 using EcommerceShop.Identity.Auth;
 using EcommerceShop.Identity.Data;
 using EcommerceShop.Identity.Endpoints;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

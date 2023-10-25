@@ -1,8 +1,8 @@
+using EcommerceShop.BuildingBlocks.Correlation;
+using EcommerceShop.BuildingBlocks.Kafka;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using EcommerceShop.BuildingBlocks.Correlation;
-using EcommerceShop.BuildingBlocks.Kafka;
 
 namespace EcommerceShop.BuildingBlocks.Messaging;
 

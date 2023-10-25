@@ -1,7 +1,7 @@
 using System.Text.Json;
-using Microsoft.Extensions.Caching.Distributed;
 using EcommerceShop.BuildingBlocks.Kafka;
 using EcommerceShop.Catalog.Endpoints;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace EcommerceShop.Catalog.Caching;
 

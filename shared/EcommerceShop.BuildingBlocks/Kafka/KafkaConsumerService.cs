@@ -1,13 +1,13 @@
 using System.Text;
 using System.Text.Json;
 using Confluent.Kafka;
+using EcommerceShop.BuildingBlocks.Correlation;
+using EcommerceShop.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog.Context;
-using EcommerceShop.BuildingBlocks.Correlation;
-using EcommerceShop.Contracts;
 
 namespace EcommerceShop.BuildingBlocks.Kafka;
 

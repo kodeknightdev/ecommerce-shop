@@ -1,10 +1,10 @@
 using System.Text;
 using System.Text.Json;
 using Confluent.Kafka;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using EcommerceShop.BuildingBlocks.Correlation;
 using EcommerceShop.Contracts;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace EcommerceShop.BuildingBlocks.Kafka;
 

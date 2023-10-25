@@ -1,6 +1,6 @@
+using EcommerceShop.BuildingBlocks.Health;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using EcommerceShop.BuildingBlocks.Health;
 
 namespace EcommerceShop.BuildingBlocks.Kafka;
 

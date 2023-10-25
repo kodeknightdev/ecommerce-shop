@@ -1,10 +1,10 @@
+using EcommerceShop.BuildingBlocks.Correlation;
+using EcommerceShop.BuildingBlocks.Errors;
+using EcommerceShop.BuildingBlocks.Logging;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using EcommerceShop.BuildingBlocks.Correlation;
-using EcommerceShop.BuildingBlocks.Errors;
-using EcommerceShop.BuildingBlocks.Logging;
 
 namespace EcommerceShop.BuildingBlocks;
 

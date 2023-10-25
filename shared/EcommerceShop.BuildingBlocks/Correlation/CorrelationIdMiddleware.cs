@@ -1,6 +1,6 @@
+using EcommerceShop.Contracts;
 using Microsoft.AspNetCore.Http;
 using Serilog.Context;
-using EcommerceShop.Contracts;
 
 namespace EcommerceShop.BuildingBlocks.Correlation;
 

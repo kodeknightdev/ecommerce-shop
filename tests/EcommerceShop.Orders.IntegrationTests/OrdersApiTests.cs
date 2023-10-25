@@ -1,12 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using EcommerceShop.Contracts;
 using EcommerceShop.Orders.Application;
 using EcommerceShop.Orders.Clients;
 using EcommerceShop.TestSupport;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EcommerceShop.Orders.IntegrationTests;
 

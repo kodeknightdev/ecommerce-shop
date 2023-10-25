@@ -1,10 +1,10 @@
+using EcommerceShop.BuildingBlocks.Messaging;
+using EcommerceShop.Orders.Clients;
+using EcommerceShop.Orders.Data;
+using EcommerceShop.TestSupport;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using EcommerceShop.Orders.Clients;
-using EcommerceShop.Orders.Data;
-using EcommerceShop.BuildingBlocks.Messaging;
-using EcommerceShop.TestSupport;
 
 namespace EcommerceShop.Orders.IntegrationTests;
 

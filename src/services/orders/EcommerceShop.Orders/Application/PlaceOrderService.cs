@@ -1,10 +1,10 @@
-using Microsoft.EntityFrameworkCore;
 using EcommerceShop.BuildingBlocks.Errors;
+using EcommerceShop.BuildingBlocks.Messaging;
 using EcommerceShop.Contracts;
 using EcommerceShop.Orders.Clients;
 using EcommerceShop.Orders.Data;
 using EcommerceShop.Orders.Domain;
-using EcommerceShop.BuildingBlocks.Messaging;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceShop.Orders.Application;
 
