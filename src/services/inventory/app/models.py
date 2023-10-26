@@ -44,7 +44,9 @@ class Reservation(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     order_id: Mapped[str] = mapped_column(String(36), index=True)
-    status: Mapped[ReservationStatus] = mapped_column(Enum(ReservationStatus, native_enum=False, length=16), default=ReservationStatus.RESERVED)
+    status: Mapped[ReservationStatus] = mapped_column(
+        Enum(ReservationStatus, native_enum=False, length=16), default=ReservationStatus.RESERVED
+    )
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)

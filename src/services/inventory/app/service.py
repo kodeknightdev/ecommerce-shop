@@ -134,7 +134,9 @@ class InventoryService:
     def expire_reservations(self, now: datetime | None = None) -> int:
         now = now or datetime.now(timezone.utc)
         expired = self.session.scalars(
-            select(Reservation).where(Reservation.status == ReservationStatus.RESERVED, Reservation.expires_at < now).with_for_update(skip_locked=True)
+            select(Reservation)
+            .where(Reservation.status == ReservationStatus.RESERVED, Reservation.expires_at < now)
+            .with_for_update(skip_locked=True)
         ).all()
         for reservation in expired:
             self._return_quantities(reservation)
@@ -171,7 +173,8 @@ class InventoryService:
         self.session.commit()
 
     def _lock_rows(self, product_ids: list[str]) -> dict[str, StockItem]:
-        rows = self.session.scalars(select(StockItem).where(StockItem.product_id.in_(product_ids)).order_by(StockItem.product_id).with_for_update()).all()
+        query = select(StockItem).where(StockItem.product_id.in_(product_ids)).order_by(StockItem.product_id).with_for_update()
+        rows = self.session.scalars(query).all()
         return {r.product_id: r for r in rows}
 
     def _return_quantities(self, reservation: Reservation) -> None:
