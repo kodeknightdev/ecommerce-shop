@@ -1,10 +1,7 @@
 # ecommerce-shop
 
-An online store built as a set of small services: customers browse a catalog, fill a cart and check
-out, and checkout runs as an **event-driven saga over Kafka** (reserve stock → take payment → confirm,
-or compensate). It is a learning and portfolio project for people who want to see common
-microservice patterns - API gateway, saga, outbox/inbox, circuit breakers, cache-aside - working
-together in one repository that starts with a single `docker compose up`.
+An online store built as a set of small, independently deployable services: customers can browse the product catalog, manage their shopping cart, and complete purchases through a checkout workflow. Checkout runs as an event-driven saga over Kafka (reserve stock → process payment → confirm order, or compensate on failure).
+It is a typical e-commerce project built using common microservice patterns, including an API gateway, saga, outbox/inbox, circuit breakers, and cache-aside. The project demonstrates how these patterns work together to improve scalability, reliability, and service-to-service communication, all within a single repository that can be started with one `docker compose up` command.
 
 ## Features
 
