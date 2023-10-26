@@ -85,7 +85,10 @@ def order_placed(order_id, *lines):
         "orderId": order_id,
         "userId": str(uuid.uuid4()),
         "email": "casey@example.com",
-        "items": [{"productId": pid, "sku": f"SKU-{i}", "name": f"Item {i}", "quantity": q, "unitPrice": 10.0} for i, (pid, q) in enumerate(lines)],
+        "items": [
+            {"productId": pid, "sku": f"SKU-{i}", "name": f"Item {i}", "quantity": q, "unitPrice": 10.0}
+            for i, (pid, q) in enumerate(lines)
+        ],
         "total": 10.0 * sum(q for _, q in lines),
         "currency": "USD",
         "paymentMethod": "pm_card_visa",

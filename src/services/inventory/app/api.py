@@ -8,7 +8,7 @@ from .auth import CurrentUser, require_admin
 from .config import Settings, get_settings
 from .db import get_session
 from .models import Reservation, ReservationStatus, StockItem
-from .schemas import (AdjustStockRequest, AvailabilityRequest, ReservationOut, StockItemAdmin, StockLevel, StockPage)
+from .schemas import AdjustStockRequest, AvailabilityRequest, ReservationOut, StockItemAdmin, StockLevel, StockPage
 from .service import InventoryService
 
 router = APIRouter(prefix="/api/inventory", tags=["inventory"])
@@ -20,7 +20,9 @@ def get_service(request: Request, session: Session = Depends(get_session), setti
 
 
 def to_level(item: StockItem) -> StockLevel:
-    return StockLevel(product_id=item.product_id, sku=item.sku, available=item.available, in_stock=item.available > 0, low_stock=item.low_stock)
+    return StockLevel(
+        product_id=item.product_id, sku=item.sku, available=item.available, in_stock=item.available > 0, low_stock=item.low_stock
+    )
 
 
 def to_admin(item: StockItem) -> StockItemAdmin:
